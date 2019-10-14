@@ -23,6 +23,10 @@ After completing this assignment, you should be able to:
   - One or more test files to test your program
   - A `Pipfile` with your dependencies listed in it
 
+## Approach
+
+As you go through this assignment, use test-driven development as much as possible to write your code. It will be difficult to test that the appropriate `.png` file is generated, but all the data transformation should be testable, as should the path generation.
+
 ## Normal Mode
 
 Read [the Mountain Paths PDF](MountainPaths.pdf) to get started.
@@ -60,7 +64,7 @@ Starting from each location on the left-hand side of the map, plot an optimal pa
 
 If you get that done, then read [the `argparse` module tutorial](https://docs.python.org/3.7/howto/argparse.html). Implement a command-line interface for your program, allowing the user to give the name of the elevation file on the command line. You can add more options, such as the color to use for the optimal path and other paths.
 
-Once you do the above, you can get your own data. Go to [the NOAA Grid Extract tool](http://maps.ngdc.noaa.gov/viewers/wcs-client/). The UI is a litle funky. You want to:
+Once you do the above, you can get your own data. Go to [the NOAA Grid Extract tool](http://maps.ngdc.noaa.gov/viewers/wcs-client/). The UI is a little funky. You want to:
 
 - Select an area
 - Download the data in "ArcGIS ASCII Grid" format.
