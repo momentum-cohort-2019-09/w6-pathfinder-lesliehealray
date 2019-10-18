@@ -26,12 +26,14 @@ def topo_data(elevation_data):
 
 data = elevation_data()
 matrix = topo_data(data)
-print(matrix[0][0])
+# print(matrix[0][0])
 
 
 def build_gradient(matrix):
     flat_list = [item for sublist in matrix for item in sublist]
+    flat_list.sort()
     unique_values = set(flat_list)
-    unique_values.sort()
-    
     return unique_values
+
+
+build_gradient(matrix)
