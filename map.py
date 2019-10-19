@@ -32,6 +32,16 @@ class Map:
             brightness = (elev - min_elev) / (max_elev - min_elev)
             greyscale = int(255 * brightness)
             self.gradient[elev] = (greyscale, greyscale, greyscale, 255)
+    
+    def generate_image(self):
+        height = len(self.matrix)
+        width =  len(self.matrix[0])
+        image = Image.new("RGBA", (height, width), color=(0,0,0,255))
+        for y, row in enumerate(self.matrix):
+            for x, elev in enumerate(row):
+                image.putpixel((x, y), self.gradient[elev])
+        image.save('image.png')
+
 
 
 map = Map("elevation_small.txt")
@@ -40,12 +50,8 @@ map.get_elevation_data()
 map.get_topo_data()
 map.get_unique_elevations()
 map.build_gradient()
+map.generate_image()
 
 
-image = Image.new("RGBA", (600, 600), color=(0,0,0,255))
-for y, row in enumerate(map.matrix):
-    for x, elev in enumerate(row):
-        image.putpixel((x, y), map.gradient[elev])
-    
-image.save('image.png')
+
 
