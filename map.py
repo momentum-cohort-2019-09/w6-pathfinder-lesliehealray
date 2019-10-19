@@ -16,7 +16,7 @@ class Map:
     def get_topo_data(self):
         # [y[elev1, elev2, elev3, evel4] 
         for row in self.elevation_data:
-            row = [int(x) for x in row.strip("\n").split(" ")]
+            row = [int(x) for x in row.lstrip().rstrip("\n").split(" ")]
             self.matrix.append(row)
 
 
@@ -33,24 +33,24 @@ class Map:
             greyscale = int(255 * brightness)
             self.gradient[elev] = (greyscale, greyscale, greyscale, 255)
     
-    def generate_image(self):
+    def generate_image(self, filename):
         height = len(self.matrix)
         width =  len(self.matrix[0])
         image = Image.new("RGBA", (height, width), color=(0,0,0,255))
         for y, row in enumerate(self.matrix):
             for x, elev in enumerate(row):
                 image.putpixel((x, y), self.gradient[elev])
-        image.save('image.png')
+        image.save(f'{filename}.png')
 
+    def topo_map(self, filename):
+        self.get_elevation_data()
+        self.get_topo_data()
+        self.get_unique_elevations()
+        self.build_gradient()
+        self.generate_image(filename)
 
-
-map = Map("elevation_small.txt")
-
-map.get_elevation_data()
-map.get_topo_data()
-map.get_unique_elevations()
-map.build_gradient()
-map.generate_image()
+map = Map("elevation_large.txt")
+map.topo_map('foo')
 
 
 
