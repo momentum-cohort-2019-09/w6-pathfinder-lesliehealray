@@ -2,50 +2,50 @@ from PIL import Image
 
 class Map:
     def __init__(self, file_path):
-        self.file_path
+        self.file_path = file_path
+        self.elevation_data = []
+        self.matrix = []
+        self.unique_elevations = []
+        self.gradient = {}
+
     
-    def elevation_data(self):
+    def get_elevation_data(self):
         with open(self.file_path) as file_handler:
-            elevation_data = file_handler.readlines()
-        return elevation_data
+           self.elevation_data = file_handler.readlines()
 
-    def topo_data(self, elevation_data):
+    def get_topo_data(self):
         # [y[elev1, elev2, elev3, evel4] 
-        matrix = []
-        for row in elevation_data:
+        for row in self.elevation_data:
             row = [int(x) for x in row.strip("\n").split(" ")]
-            matrix.append(row)
-        return matrix
+            self.matrix.append(row)
 
 
-    def unique_elevations(self, matrix):
-        flat_list = [item for sublist in matrix for item in sublist]
+    def get_unique_elevations(self):
+        flat_list = [item for sublist in self.matrix for item in sublist]
         flat_list.sort()
-        unique_values = set(flat_list)
-        return unique_values
+        self.unique_elevations = set(flat_list)
 
-    def build_gradient(self, unique_values):
-        gradient = {}
-        max_elev = max(unique_values)
-        min_elev = min(unique_values)
-        for elev in unique_values:
+    def build_gradient(self):
+        max_elev = max(self.unique_elevations)
+        min_elev = min(self.unique_elevations)
+        for elev in self.unique_elevations:
             brightness = (elev - min_elev) / (max_elev - min_elev)
             greyscale = int(255 * brightness)
-            gradient[elev] = (greyscale, greyscale, greyscale, 255)
-        return gradient
+            self.gradient[elev] = (greyscale, greyscale, greyscale, 255)
 
 
-data = elevation_data()
-matrix = topo_data(data)
-# print(matrix[0][0])
-unique_values = unique_elevations(matrix)
-gradient = build_gradient(unique_values)
+map = Map("elevation_small.txt")
+
+map.get_elevation_data()
+map.get_topo_data()
+map.get_unique_elevations()
+map.build_gradient()
 
 
 image = Image.new("RGBA", (600, 600), color=(0,0,0,255))
-for y, row in enumerate(matrix):
+for y, row in enumerate(map.matrix):
     for x, elev in enumerate(row):
-        image.putpixel((x, y), gradient[elev])
+        image.putpixel((x, y), map.gradient[elev])
     
 image.save('image.png')
 
