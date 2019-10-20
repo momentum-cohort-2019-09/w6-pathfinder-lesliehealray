@@ -1,4 +1,5 @@
 from PIL import Image
+from random import choice, randrange
 
 class Map:
     def __init__(self, file_path):
@@ -7,6 +8,9 @@ class Map:
         self.matrix = []
         self.unique_elevations = []
         self.gradient = {}
+        self.width = 0
+        self.height = 0
+        self.image = None
 
     
     def get_elevation_data(self):
@@ -34,13 +38,40 @@ class Map:
             self.gradient[elev] = (greyscale, greyscale, greyscale, 255)
     
     def generate_image(self, filename):
-        height = len(self.matrix)
-        width =  len(self.matrix[0])
-        image = Image.new("RGBA", (width, height), color=(0,0,0,255))
+        self.height = len(self.matrix)
+        self.width =  len(self.matrix[0])
+        self.image = Image.new("RGBA", (self.width, self.height), color=(0,0,0,255))
         for y, row in enumerate(self.matrix):
             for x, elev in enumerate(row):
-                image.putpixel((x, y), self.gradient[elev])
-        image.save(f'{filename}.png')
+                self.image.putpixel((x, y), self.gradient[elev])
+        self.image.save(f'{filename}.png')
+
+    def draw_path(self, filename):
+        y = randrange(0, self.height)
+        x = 0
+        self.image.putpixel((x, y), (0, 128, 128, 1))
+        elevation = self.matrix[y][x]
+        for x in range(1, self.width-1):
+            choices = []
+            left = y-1
+            right = y+1
+            forward = y
+            for y in [left, forward, right]:
+                if (0 <= y < self.height):
+                    choices.append({
+                        'x': x, 'y': y, 'delta': abs(elevation - self.matrix[y][x])
+                    })
+            print([choice['delta'] for choice in choices])
+            min_delta = min([choice['delta'] for choice in choices])
+            print(min_delta)
+            next_step = next((item for item in choices if item['delta'] == min_delta), None)
+            print(next_step)
+            self.image.putpixel((next_step["x"], next_step["y"]),(0, 128, 128, 1))
+            y = next_step["y"]
+        self.image.save(f'{filename}.png')
+
+
+
 
     def topo_map(self, filename):
         self.get_elevation_data()
@@ -48,6 +79,10 @@ class Map:
         self.get_unique_elevations()
         self.build_gradient()
         self.generate_image(filename)
+        self.draw_path(filename)
+
+   
+
 
 map = Map("elevation_small.txt")
 map.topo_map('foo')
