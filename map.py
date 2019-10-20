@@ -14,7 +14,7 @@ class Map:
            self.elevation_data = file_handler.readlines()
 
     def get_topo_data(self):
-        # [y[elev1, elev2, elev3, evel4] 
+        # [[elev1, elev2], [elev3, evel4]] 
         for row in self.elevation_data:
             row = [int(x) for x in row.lstrip().rstrip("\n").split(" ")]
             self.matrix.append(row)
@@ -36,7 +36,7 @@ class Map:
     def generate_image(self, filename):
         height = len(self.matrix)
         width =  len(self.matrix[0])
-        image = Image.new("RGBA", (height, width), color=(0,0,0,255))
+        image = Image.new("RGBA", (width, height), color=(0,0,0,255))
         for y, row in enumerate(self.matrix):
             for x, elev in enumerate(row):
                 image.putpixel((x, y), self.gradient[elev])
@@ -49,7 +49,7 @@ class Map:
         self.build_gradient()
         self.generate_image(filename)
 
-map = Map("elevation_large.txt")
+map = Map("elevation_small.txt")
 map.topo_map('foo')
 
 
