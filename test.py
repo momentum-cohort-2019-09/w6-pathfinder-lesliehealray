@@ -36,10 +36,13 @@ class TestMap:
         diff = ImageChops.difference(fixture_image, generated_image)
         assert diff.getbbox() is None
 
+
+
+# SOME RESOURCES USED:
 # https://stackoverflow.com/questions/50132703/pytest-fixture-for-a-class-through-self-not-as-method-argument
 # effbot.org/zone/pil-comparing-images.htm
 # https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
 # pip3 install pytest-cov and run pytest --cov=map test.py           
-
+# dbader.org/blog/python-generator
     
 
