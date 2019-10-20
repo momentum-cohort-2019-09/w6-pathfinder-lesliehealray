@@ -44,5 +44,5 @@ class TestMap:
 # https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
 # pip3 install pytest-cov and run pytest --cov=map test.py           
 # dbader.org/blog/python-generator
-    
+   
 
